@@ -3,7 +3,8 @@ from __future__ import annotations
 from pathlib import Path
 
 from mythings.corpus import chunk, ingest
-from mythings.engine import EngineRequest, EngineResult, NoopEngine
+from mythings.engine import NoopEngine
+from mythings.testing import ScriptedEngine
 
 from mygrader.grader import (
     Answer,
@@ -21,16 +22,6 @@ _TEXT = (
     "responsibilities; the M-step maximizes the expected complete-data log-likelihood. "
     "PCA projects data onto the leading eigenvectors of the covariance matrix."
 )
-
-
-class ScriptedEngine:
-    def __init__(self, reply: str) -> None:
-        self.reply = reply
-        self.calls: list[EngineRequest] = []
-
-    def run(self, request: EngineRequest) -> EngineResult:
-        self.calls.append(request)
-        return EngineResult(text=self.reply, data={})
 
 
 def _chunks():
