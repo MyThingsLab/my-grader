@@ -32,7 +32,7 @@ def exam(tmp_path: Path) -> Path:
 
 
 def _fake_engine(monkeypatch) -> None:
-    from mythings.engine import EngineResult
+    from mythings.testing import ScriptedEngine
 
     import mygrader.cli as cli
 
@@ -40,12 +40,7 @@ def _fake_engine(monkeypatch) -> None:
         '{"grades": [{"verdict": "correct", "score": 1.0},'
         '{"verdict": "incorrect", "score": 0.0, "gaps": ["eigenvectors"]}]}'
     )
-
-    class Fake:
-        def run(self, _request):
-            return EngineResult(text=reply)
-
-    monkeypatch.setattr(cli, "_engine", lambda _name: Fake())
+    monkeypatch.setattr(cli, "_engine", lambda _name: ScriptedEngine(reply=reply))
 
 
 def test_grade_reports_and_records(corpus: Path, exam: Path, tmp_path: Path, monkeypatch,
