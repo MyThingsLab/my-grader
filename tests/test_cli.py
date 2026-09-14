@@ -45,7 +45,7 @@ def _fake_engine(monkeypatch) -> None:
         def run(self, _request):
             return EngineResult(text=reply)
 
-    monkeypatch.setattr(cli, "_engine", lambda _name: Fake())
+    monkeypatch.setattr(cli, "build_engine_from_args", lambda args: Fake())
 
 
 def test_grade_reports_and_records(corpus: Path, exam: Path, tmp_path: Path, monkeypatch,

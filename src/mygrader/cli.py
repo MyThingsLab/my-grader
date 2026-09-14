@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from mythings.engine import ClaudeCLIEngine, Engine, NoopEngine
+from mythings.engine import build_engine_from_args
 from mythings.mastery import record
 
 from mygrader.grader import (
@@ -18,10 +18,6 @@ from mygrader.grader import (
 
 BACKLOG_LABEL = "my-grader"
 DEFAULT_LEDGER = Path(".mythings/mastery.jsonl")
-
-
-def _engine(name: str) -> Engine:
-    return NoopEngine() if name == "noop" else ClaudeCLIEngine()
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -55,7 +51,7 @@ def main(argv: list[str] | None = None) -> int:
         print("no corpus files found")
         return 1
 
-    grades = grade_exam(answers, chunks, _engine(args.engine), top=args.top)
+    grades = grade_exam(answers, chunks, build_engine_from_args(args), top=args.top)
     print(render_report(Report(items=tuple(grades))))
     if not args.no_record:
         for attempt in to_attempts(grades):
